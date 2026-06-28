@@ -41,3 +41,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Allure
+allure-results/
+allure-report/
+.allure
+
+# Credentials
+src/main/resources/config.properties
