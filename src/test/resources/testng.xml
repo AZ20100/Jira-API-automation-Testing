@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Jira API Suite">
+
+    <test name="Issue Tests">
+        <classes>
+            <class name="com.jira.tests.issue.IssueTests"/>
+            <class name="com.jira.tests.issue.SubTaskTests"/>
+        </classes>
+    </test>
+
+    <test name="Comment Tests">
+        <classes>
+            <class name="com.jira.tests.comment.CommentTests"/>
+        </classes>
+    </test>
+
+</suite>
