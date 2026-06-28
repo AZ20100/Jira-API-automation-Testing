@@ -5,10 +5,10 @@ A REST API automation framework for Jira Cloud using
 RestAssured, TestNG, and Allure Reports.
 
 ## 🛠️ Tech Stack
-- Java 17
+- Java 25
 - REST Assured 5.4.0
 - TestNG 7.9.0
-- Allure Reports 2.25.0
+- Allure Reports 2.30.0
 - Maven
 - Jackson Databind
 
