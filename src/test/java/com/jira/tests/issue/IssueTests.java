@@ -10,6 +10,7 @@ import org.apache.http.protocol.ResponseServer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import com.testing.base.JiraBaseTest;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class IssueTests {
 
     private IssueClient issueClient;
-    private String issueKey;
+    public static String issueKey;
     private String highPriorityIssueKey;
     private String deleteIssueKey;
 
@@ -47,6 +48,7 @@ public class IssueTests {
         Assert.assertNotNull(issueResponse.getKey());
 
         issueKey = issueResponse.getKey();
+        JiraBaseTest.createdKey = issueKey;
     }
 
     @Test (priority = 2, dependsOnMethods = "createIssueSeccessfully")

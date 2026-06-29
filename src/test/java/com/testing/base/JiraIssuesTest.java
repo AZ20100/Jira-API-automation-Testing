@@ -16,6 +16,27 @@ import static org.hamcrest.Matchers.*;
 @Feature("Issues Management")
 
 public class JiraIssuesTest extends JiraBaseTest {
+
+    @org.testng.annotations.BeforeClass
+    public void setupClassName() {
+        createdKey = given()
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"fields\": {\n" +
+                        "    \"project\": { \"key\": \"SCRUM\" },\n" +
+                        "    \"summary\": \"Independent Validation Issue for JiraIssuesTest\",\n" +
+                        "    \"issuetype\": { \"id\": \"10001\" }\n" +
+                        "  }\n" +
+                        "}")
+                .when()
+                .post("/issue")
+                .then()
+                .statusCode(201)
+                .extract().path("key");
+
+        System.out.println(" Created independent Issue for JiraIssuesTest: " + createdKey);
+    }
+
     @Test(priority = 16)
     @Story("Comments Lifecycle")
     @Description("Verify that a user can successfully add a text comment to an active Jira issue.")
@@ -23,6 +44,7 @@ public class JiraIssuesTest extends JiraBaseTest {
 
 
     public void testAddTextComment() {
+
         String commentPayload = "{\n" +
                 "  \"body\": {\n" +
                 "    \"type\": \"doc\",\n" +
@@ -37,7 +59,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(commentPayload)
                 .when()
-                .post("rest/api/3/issue/{key}/comment")
+                .post("/issue/{key}/comment")
                 .then()
                 .statusCode(201)
                 .body("id", notNullValue())
@@ -49,7 +71,7 @@ public class JiraIssuesTest extends JiraBaseTest {
         given()
                 .pathParam("key", createdKey)
                 .when()
-                .get("rest/api/3/issue/{key}/comment")
+                .get("/issue/{key}/comment")
                 .then()
                 .statusCode(200)
                 .body("comments.id", hasItem(commentId));
@@ -72,7 +94,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("commentId", commentId)
                 .body(updatedPayload)
                 .when()
-                .put("rest/api/3/issue/{key}/comment/{commentId}")
+                .put("/issue/{key}/comment/{commentId}")
                 .then()
                 .statusCode(200)
                 .body("body.content[0].content[0].text", equalTo("Updated test automation comment content."));
@@ -84,7 +106,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .pathParam("commentId", commentId)
                 .when()
-                .delete("rest/api/3/issue/{key}/comment/{commentId}")
+                .delete("/issue/{key}/comment/{commentId}")
                 .then()
                 .statusCode(204);
     }
@@ -98,7 +120,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(payload)
                 .when()
-                .put("rest/api/3/issue/{key}/assignee")
+                .put("/issue/{key}/assignee")
                 .then()
                 .statusCode(204);
     }
@@ -114,7 +136,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(payload)
                 .when()
-                .put("rest/api/3/issue/{key}/assignee")
+                .put("/issue/{key}/assignee")
                 .then()
                 .statusCode(204);
     }
@@ -124,7 +146,7 @@ public class JiraIssuesTest extends JiraBaseTest {
         given()
                 .pathParam("key", createdKey)
                 .when()
-                .get("rest/api/3/issue/{key}/transitions")
+                .get("/issue/{key}/transitions")
                 .then()
                 .statusCode(200)
                 .body("transitions", is(notNullValue()));
@@ -138,7 +160,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(transitionPayload)
                 .when()
-                .post("rest/api/3/issue/{key}/transitions")
+                .post("/issue/{key}/transitions")
                 .then()
                 .statusCode(204);
     }
@@ -148,7 +170,7 @@ public class JiraIssuesTest extends JiraBaseTest {
         given()
                 .pathParam("key", createdKey)
                 .when()
-                .get("rest/api/3/issue/{key}")
+                .get("/issue/{key}")
                 .then()
                 .statusCode(200)
                 .body("fields.status.name", equalTo("In Progress"));
@@ -162,7 +184,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(transitionPayload)
                 .when()
-                .post("rest/api/3/issue/{key}/transitions")
+                .post("/issue/{key}/transitions")
                 .then()
                 .statusCode(204);
     }
@@ -177,7 +199,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", "SCRUM-999999")
                 .body(simpleBody)
                 .when()
-                .post("rest/api/3/issue/{key}/comment")
+                .post("/issue/{key}/comment")
                 .then()
                 .statusCode(404);
     }
@@ -190,7 +212,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(invalidPayload)
                 .when()
-                .post("rest/api/3/issue/{key}/transitions")
+                .post("/issue/{key}/transitions")
                 .then()
                 .statusCode(Matchers.oneOf(400, 404));
     }
@@ -204,7 +226,7 @@ public class JiraIssuesTest extends JiraBaseTest {
                 .pathParam("key", createdKey)
                 .body(payload)
                 .when()
-                .put("rest/api/3/issue/{key}/assignee")
+                .put("/issue/{key}/assignee")
                 .then()
                 .statusCode(404);
     }

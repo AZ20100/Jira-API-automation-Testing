@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class JiraBaseTest {
 
-    protected String createdKey = "SCRUM-117";
+    public static String createdKey;
     protected String commentId;
     private static Properties config = new Properties();
 
@@ -23,12 +23,12 @@ public class JiraBaseTest {
         );
         config.load(fis);
 
-        RestAssured.baseURI = config.getProperty("BASE_URL");
+        RestAssured.baseURI = config.getProperty("baseUrl");
 
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setAuth(RestAssured.preemptive().basic(
-                        config.getProperty("EMAIL"),
-                        config.getProperty("API_TOKEN")
+                        config.getProperty("email"),
+                        config.getProperty("token")
                 ))
                 .setContentType(ContentType.JSON)
                 .addFilter(new AllureRestAssured())
